@@ -1,0 +1,13 @@
+Copyright (c) 2026 Alex Black.
+
+Original first-party Zog source, including historical first-party snapshots
+for which Alex Black holds copyright, is licensed at your option under
+BSD-3-Clause OR GPL-3.0-only. The complete terms are retained in LICENSE
+and LICENSES/BSD-3-Clause.txt and LICENSES/GPL-3.0-only.txt.
+
+This reviewed source export publishes only the files present in this tree.
+The license grant does not itself disclose or publish archived private Git
+history or private execution evidence. It does not purport to relicense
+independently authored third-party packages, router firmware, public network
+infrastructure, credentials, operator policies or acquired router state.
+No hardware or WAN acceptance follows from the source license.

@@ -1,0 +1,53 @@
+name: network-traverse source-only CI
+
+on:
+  push:
+    branches: [unstable, main]
+  pull_request:
+    branches: [unstable, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - name: Checkout exact Git source without retained credentials
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5, Node24
+        with:
+          persist-credentials: false
+      - name: Install Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6, Node24
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Check clean source and license delivery
+        run: python tools/check-public-source.py
+      - name: Compile isolated source and offline fake-router tests
+        env:
+          PYTHONPYCACHEPREFIX: ${{ runner.temp }}/network-traverse-pycache
+        run: python -m compileall -q src tests tools
+      - name: Offline protocol and mapping lifecycle tests
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -v
+      - name: Read-only CLI help without initializing any state
+        env:
+          PYTHONPATH: src
+        run: python -m zog.network_traverse --help
+      - name: Verify source packages, exact license texts and extracted sdist tests
+        run: |
+          python -m pip install "setuptools>=80,<83" "wheel>=0.45,<1" "build>=1.2,<2"
+          python -m build --no-isolation --outdir "$RUNNER_TEMP/network-traverse-dist"
+          python tools/check-built-packages.py "$RUNNER_TEMP/network-traverse-dist"
+
+# No NAT router configuration, public listening socket, credentials, token,
+# cloud deployment, root privilege, upload, release or package publication.

@@ -1,0 +1,3 @@
+# Preserve offline test support in the source distribution.
+recursive-include tests *.py
+include COPYRIGHT
