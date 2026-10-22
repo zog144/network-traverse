@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=80,<83"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zog-network-traverse"
+version = "0.1.0.dev0"
+description = "Opt-in NAT mapping and network path management for Zog hosts"
+requires-python = ">=3.11"
+license = "BSD-3-Clause OR GPL-3.0-only"
+license-files = ["LICENSE", "COPYRIGHT", "LICENSES/*.txt", "THIRD-PARTY-NOTICES.md"]
+dependencies = []
+
+[project.optional-dependencies]
+upnp = ["miniupnpc>=2.2"]
+
+[project.scripts]
+network-traverse = "zog.network_traverse.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["zog.network_traverse*"]
+namespaces = true
